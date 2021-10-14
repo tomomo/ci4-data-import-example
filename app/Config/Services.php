@@ -17,16 +17,23 @@ use CodeIgniter\Config\BaseService;
  * method format you should use for your service methods. For more examples,
  * see the core Services file at system/Config/Services.php.
  */
+use App\Libraries\Jyusyojp;
 class Services extends BaseService
 {
-    /*
-     * public static function example($getShared = true)
-     * {
-     *     if ($getShared) {
-     *         return static::getSharedInstance('example');
-     *     }
-     *
-     *     return new \CodeIgniter\Example();
-     * }
-     */
+	/**
+	 * JyusyoJP
+	 *
+	 * @param mixed $getShared shared
+	 *
+	 * @return object
+	 */
+	public static function jyusyojp($getShared = true)
+	{
+		if ($getShared)
+		{
+			return static::getSharedInstance('jyusyojp');
+		}
+
+		return new Jyusyojp();
+	}
 }
