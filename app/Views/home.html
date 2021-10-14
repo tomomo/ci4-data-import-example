@@ -5,10 +5,14 @@
   <h1>DataImportExample</h1>
   <div>
     <div class="alert alert-info">
-      <p class="mb-0">This is an example implementation that imports large CSV data and uses insertBatch.</p>
+      <p>This is a sample that imports large CSV data and was created to confirm the following issues:</p>
+      <p>
+        <a href="https://github.com/codeigniter4/CodeIgniter4/issues/4099">https://github.com/codeigniter4/CodeIgniter4/issues/4099</a>
+      </p>
       <p class="mb-0">Use <b><a href="http://jusyo.jp/downloads/new/csv/csv_zenkoku.zip">csv_zenkoku.zip</a></b> that can be downloaded from the site <a href="http://jusyo.jp/csv/new.php">"jusyo.jp"</a>.</p>
       <p class="mb-0">This is CSV data for Japanese addresses.</p>
       <p class="mb-0">It has about 150,000 records and is 20MB of data.</p>
+      <p>No details such as error handling have been created.</p>
     </div>
 
     <?php if (session('success')) : ?>
@@ -18,14 +22,16 @@
     <?php endif; ?>
 
     <div class="card p-3 mb-3">
+      <h2>Standard</h2>
       <pre class="bg-dark text-white">
         <code>
+          // https://www.codeigniter.com/user_guide/database/query_builder.html?highlight=insertBatch
           $db->table($this->table)->insertBatch($rows,null,80);
         </code>
       </pre>
       <?= form_open_multipart('/home/upload2') ?>
       <div>
-        <label class="form-label"><?= lang('App.selectFile') ?></label>
+        <label class="form-label">Specify "csv_zenkoku.zip"</label>
         <?= form_upload(['name' => 'userfile', 'accept' => 'application/zip']) ?>
         <button class="btn btn-primary"><?= lang('App.upload') ?></button>
       </div>
@@ -33,6 +39,7 @@
     </div>
 
     <div class="card p-3 mb-3">
+      <h2>Alternative</h2>
       <pre class="bg-dark text-white">
         <code>
           foreach (array_chunk($rows, 80) as $chunk)
@@ -43,7 +50,7 @@
       </pre>
       <?= form_open_multipart('/home/upload1') ?>
       <div>
-        <label class="form-label"><?= lang('App.selectFile') ?></label>
+        <label class="form-label">Specify "csv_zenkoku.zip"</label>
         <?= form_upload(['name' => 'userfile', 'accept' => 'application/zip']) ?>
         <button class="btn btn-primary"><?= lang('App.upload') ?></button>
       </div>
