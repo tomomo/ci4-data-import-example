@@ -4,7 +4,11 @@ services:
   web:
     hostname: "web" # fixed
     container_name: "ci4-data-import-example-web"
-    build: .devcontainer/containers/apache
+    build:
+      context: .devcontainer/containers/apache
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID}
     depends_on:
       - php-fpm-80
     ports:
@@ -15,12 +19,21 @@ services:
   php-fpm-80:
     hostname: "php-fpm-80" # fixed
     container_name: "ci4-data-import-example-app"
-    build: .devcontainer/containers/php-8.0-node
+    build:
+      context: .devcontainer/containers/php-8.0-node
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID}
     volumes:
       - .:/var/www/html:cached
   # php-fpm-74:
   #   hostname: "php-fpm-74" # fixed
-  #   build: .devcontainer/containers/php-7.4-node
+  #   container_name: "ci4-data-import-example-app"
+  #   build:
+  #     context: .devcontainer/containers/php-7.4-node
+  #     dockerfile: Dockerfile
+  #     args:
+  #       UID: ${UID}
   #   volumes:
   #     - .:/var/www/html:cached
   db:

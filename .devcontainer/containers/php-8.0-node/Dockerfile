@@ -78,6 +78,6 @@ RUN cat /usr/local/etc/php/php.ini-production > /usr/local/etc/php/php.ini && \
   sed -r -e 's/^post_max_size( )*=[0-9 M]+$/post_max_size = 16M/g' -i /usr/local/etc/php/php.ini && \
   sed -r -e 's/^upload_max_filesize( )*=[0-9 M]+$/upload_max_filesize = 16M/g' -i /usr/local/etc/php/php.ini
 
-# ARG UID=33
-# RUN usermod -u 100 www-data
-# USER www-data
+ARG UID=33
+RUN usermod -u ${UID} www-data
+USER www-data
