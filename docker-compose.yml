@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  web:
+    hostname: "web" # fixed
+    container_name: "ci4-data-import-example-web"
+    build: .devcontainer/containers/apache
+    depends_on:
+      - php-fpm-80
+    ports:
+      - 80:8080
+      - 8074:8074
+    volumes:
+      - ./public:/var/www/html/public:cached
+  php-fpm-80:
+    hostname: "php-fpm-80" # fixed
+    container_name: "ci4-data-import-example-app"
+    build: .devcontainer/containers/php-8.0-node
+    volumes:
+      - .:/var/www/html:cached
+  # php-fpm-74:
+  #   hostname: "php-fpm-74" # fixed
+  #   build: .devcontainer/containers/php-7.4-node
+  #   volumes:
+  #     - .:/var/www/html:cached
+  db:
+    hostname: "db" # fixed
+    container_name: "ci4-data-import-example-db"
+    build:
+      context: .devcontainer/containers/mariadb
+      dockerfile: Dockerfile
+    restart: always
+    volumes:
+      - data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=${database_default_database}
+      - MYSQL_USER=${database_default_username}
+      - MYSQL_PASSWORD=${database_default_password}
+  phpmyadmin:
+    hostname: "phpmyadmin" # fixed
+    container_name: "ci4-data-import-example-phpmyadmin"
+    image: "phpmyadmin/phpmyadmin:latest"
+    restart: always
+    depends_on:
+      - db
+    ports:
+      - "8306:80"
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=db
+      - PMA_USER=root
+      - PMA_PASSWORD=root
+      - MEMORY_LIMIT=128M
+      - UPLOAD_LIMIT=128M
+      - MAX_EXECUTION_TIME=0
+volumes:
+  data:
+    external: true
+    name: ci4-data-import-example-db
